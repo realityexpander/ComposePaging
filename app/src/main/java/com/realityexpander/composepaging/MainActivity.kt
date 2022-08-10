@@ -22,13 +22,16 @@ class MainActivity : ComponentActivity() {
             ComposePagingYTTheme {
                 val viewModel = viewModel<MainViewModel>()
                 val state = viewModel.state
+
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(state.items.size) { i ->
                         val item = state.items[i]
 
+                        // Kick off the loading (why not in a launched effect?)
                         if (i >= state.items.size - 1 && !state.endReached && !state.isLoading) {
+                            // yes its a side effect but its fine in this case because of the checks above
                             viewModel.loadNextItems()
                         }
 
