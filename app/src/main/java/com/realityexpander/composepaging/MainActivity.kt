@@ -47,6 +47,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
+                    // Show loading indicator
                     item {
                         if (state.isLoading) {
                             Row(

@@ -2,7 +2,7 @@ package com.realityexpander.composepaging
 
 class PaginatorImpl<Key, Item>(
     private val initialKey: Key,
-    private inline val onLoadUpdated: (Boolean) -> Unit,
+    private inline val onIsLoading: (Boolean) -> Unit,
     private inline val onRequest: suspend (nextKey: Key) -> Result<List<Item>>,
     private inline val getNextKey: suspend (List<Item>) -> Key,
     private inline val onError: suspend (Throwable?) -> Unit,
@@ -10,28 +10,32 @@ class PaginatorImpl<Key, Item>(
 ): Paginator<Key, Item> {
 
     private var currentKey = initialKey
-    private var isMakingRequest = false
+    private var isRequestInProgress = false
 
     override suspend fun loadNextItems() {
-        if(isMakingRequest) {
+        // Return if there is already a request in progress
+        if(isRequestInProgress) {
             return
         }
 
-        isMakingRequest = true
+        isRequestInProgress = true
+        onIsLoading(true)
 
-        onLoadUpdated(true)
-
+        // Call the api/database
         val result = onRequest(currentKey)
-        isMakingRequest = false
+        isRequestInProgress = false
         val items = result.getOrElse {
             onError(it)
-            onLoadUpdated(false)
+            onIsLoading(false)
             return
         }
 
+        // Get the key for the next page
         currentKey = getNextKey(items)
+
+        // Success
         onSuccess(items, currentKey)
-        onLoadUpdated(false)
+        onIsLoading(false)
     }
 
     override fun reset() {

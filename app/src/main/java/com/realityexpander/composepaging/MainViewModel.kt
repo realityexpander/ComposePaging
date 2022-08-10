@@ -15,7 +15,7 @@ class MainViewModel: ViewModel() {
 
     private val paginator = PaginatorImpl(
         initialKey = state.page,
-        onLoadUpdated = {
+        onIsLoading = {
             state = state.copy(isLoading = it)
         },
         onRequest = { nextPage ->

@@ -4,6 +4,7 @@ import kotlinx.coroutines.delay
 
 class Repository {
 
+    // Simulates the database
     private val remoteDataSource = (1..100).map {
         ListItem(
             title = "Item $it",
