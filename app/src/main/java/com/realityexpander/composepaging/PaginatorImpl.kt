@@ -32,6 +32,8 @@ class PaginatorImpl<Key, Item>(
         }
 
         // Get the key for the next page
+        // (Change this for pagination key, instead of using the number of items)
+        // ie: currentKey = getNextKey(result.nextPageKey)
         currentKey = getNextKey(items)
 
         // Success
