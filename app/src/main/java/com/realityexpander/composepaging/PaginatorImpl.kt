@@ -1,6 +1,6 @@
 package com.realityexpander.composepaging
 
-class DefaultPaginator<Key, Item>(
+class PaginatorImpl<Key, Item>(
     private val initialKey: Key,
     private inline val onLoadUpdated: (Boolean) -> Unit,
     private inline val onRequest: suspend (nextKey: Key) -> Result<List<Item>>,
@@ -16,8 +16,11 @@ class DefaultPaginator<Key, Item>(
         if(isMakingRequest) {
             return
         }
+
         isMakingRequest = true
+
         onLoadUpdated(true)
+
         val result = onRequest(currentKey)
         isMakingRequest = false
         val items = result.getOrElse {
@@ -25,6 +28,7 @@ class DefaultPaginator<Key, Item>(
             onLoadUpdated(false)
             return
         }
+
         currentKey = getNextKey(items)
         onSuccess(items, currentKey)
         onLoadUpdated(false)

@@ -13,7 +13,7 @@ class MainViewModel: ViewModel() {
 
     var state by mutableStateOf(ScreenState())
 
-    private val paginator = DefaultPaginator(
+    private val paginator = PaginatorImpl(
         initialKey = state.page,
         onLoadUpdated = {
             state = state.copy(isLoading = it)

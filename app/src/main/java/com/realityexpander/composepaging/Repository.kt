@@ -11,13 +11,16 @@ class Repository {
         )
     }
 
-    suspend fun getItems(page: Int, pageSize: Int): Result<List<ListItem>> {
-        delay(2000L)
+    // Simulate call to database or API
+    suspend fun getItems(page: Int /* or key */, pageSize: Int): Result<List<ListItem>> {
         val startingIndex = page * pageSize
+        delay(2000L)
+
         return if(startingIndex + pageSize <= remoteDataSource.size) {
             Result.success(
                 remoteDataSource.slice(startingIndex until startingIndex + pageSize)
             )
-        } else Result.success(emptyList())
+        } else
+            Result.success(emptyList())
     }
 }
