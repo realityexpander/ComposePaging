@@ -15,8 +15,8 @@ class MainViewModel: ViewModel() {
 
     private val paginator = PaginatorImpl(
         initialKey = state.page,
-        onIsLoading = {
-            state = state.copy(isLoading = it)
+        setIsLoading = {
+            state = state.copy(isLoading = it, errorMessage = null)
         },
         onRequest = { nextPage ->
             repository.getItems(nextPage, 20)
@@ -25,7 +25,7 @@ class MainViewModel: ViewModel() {
             state.page + 1
         },
         onError = {
-            state = state.copy(error = it?.localizedMessage)
+            state = state.copy(errorMessage = it?.localizedMessage)
         },
         onSuccess = { items, newKey ->
             state = state.copy(
@@ -50,7 +50,7 @@ class MainViewModel: ViewModel() {
 data class ScreenState(
     val isLoading: Boolean = false,
     val items: List<ListItem> = emptyList(),
-    val error: String? = null,
+    val errorMessage: String? = null,
     val endReached: Boolean = false,
     val page: Int = 0
 )

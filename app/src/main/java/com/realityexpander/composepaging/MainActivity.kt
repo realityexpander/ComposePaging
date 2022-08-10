@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    // Show loading indicator
+                    // Show loading indicator or error
                     item {
                         if (state.isLoading) {
                             Row(
@@ -58,6 +58,14 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 CircularProgressIndicator()
                             }
+                        }
+
+                        state.errorMessage?.let { errorMessage ->
+                            Text(
+                                text = "Error: ${errorMessage}",
+                                fontSize = 20.sp,
+                                color = Color.Red
+                            )
                         }
                     }
                 }
